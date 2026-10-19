@@ -122,4 +122,4 @@ Plan view: **x** runs west to east along the chamber length, **y** south to nort
 
 ## Licence
 
-Add a licence of your choice (for example MIT) before publishing.
+Released under the [MIT Licence](LICENSE).
