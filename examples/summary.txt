@@ -1,0 +1,5 @@
+Internal : 4000 x 3000 x 2400 mm
+External : 4046.8 x 3046.8 x 2436.8 mm
+Door     : south wall, 900 x 2000, offset 1000
+Panels   : 4 full + 26 cut pieces from 18 sheets = 22 sheets
+Hat/flat : 46.72 m each, 20 x 3000 mm bars each

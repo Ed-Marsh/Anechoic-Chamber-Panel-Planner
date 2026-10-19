@@ -1,0 +1,33 @@
+{
+  "internal": {
+    "length": 4000,
+    "width": 3000,
+    "height": 2400
+  },
+  "sheet": {
+    "length": 2440,
+    "width": 1220
+  },
+  "board_thickness": 22,
+  "steel_thickness": 0.7,
+  "thickness_override": {
+    "ceiling": 12
+  },
+  "hat_flat": {
+    "hat_width": 50,
+    "hat_depth": 25,
+    "flat_width": 50,
+    "stock_length": 3000,
+    "end_clearance": 0,
+    "screw_pitch": 150
+  },
+  "corner_joints": false,
+  "stagger": 0.5,
+  "kerf": 3,
+  "door": {
+    "wall": "south",
+    "offset": 1000,
+    "width": 900,
+    "height": 2000
+  }
+}
