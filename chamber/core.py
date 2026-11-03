@@ -22,7 +22,7 @@ EXAMPLE = {
     "sheet": {"length": 2440, "width": 1220},
     "board_thickness": 22,
     "steel_thickness": 0.7,
-    "thickness_override": {"ceiling": 12},
+    "thickness_override": {},
     "hat_flat": {
         "hat_width": 50, "hat_depth": 25, "flat_width": 50,
         "stock_length": 3000, "end_clearance": 0, "screw_pitch": 150

@@ -109,7 +109,7 @@ def test_summary_numbers_for_the_example():
     assert plan["sheets_for_cuts"] == 18 and plan["total_sheets"] == 22
     assert plan["total_hf"] / 1000 == pytest.approx(46.72, abs=0.005)
     assert plan["bar_count"] == 20
-    assert tuple(round(v, 1) for v in plan["external"]) == (4046.8, 3046.8, 2436.8)
+    assert tuple(round(v, 1) for v in plan["external"]) == (4046.8, 3046.8, 2446.8)
 
 
 def test_core_does_not_print(capsys):
