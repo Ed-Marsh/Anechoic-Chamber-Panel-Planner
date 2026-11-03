@@ -59,6 +59,7 @@ FORM = [
         ("corner_joints", "Hat & flat on corners and edges", "", "bool"),
         ("stagger", "Stagger (fraction of sheet)", "", "num"),
         ("kerf", "Saw kerf", "mm", "num"),
+        ("min_panel", "Minimum panel size (0 = off)", "mm", "num"),
         ("explode_mm", "Explode distance", "mm", "num"),
     ]),
     ("Door", [
@@ -486,6 +487,7 @@ class ChamberApp(tk.Tk):
                 ("Hat & flat run", f"{plan['total_hf'] / 1000:.2f} m each"),
                 ("Hat & flat stock", f"{plan['bar_count']} x {plan['stock']} mm bars each"),
                 ("Fasteners (est.)", plan["fasteners"])]
+        rows += [("Warning", w) for w in plan["warnings"]]
         fill_table(self.summary_tree, rows)
         fill_table(self.bom_tree, plan["bom"])
         fill_table(self.thick_tree, plan["thickness_rows"])
@@ -592,8 +594,11 @@ class ChamberApp(tk.Tk):
         self.show_issues(issues, general)
         if self.model and not issues and not general:
             self.refresh_views()
+            warned = len(self.plan["warnings"])
             self.set_status(f"{self.plan['total_sheets']} sheets, "
-                            f"{self.plan['total_hf'] / 1000:.2f} m of hat & flat")
+                            f"{self.plan['total_hf'] / 1000:.2f} m of hat & flat"
+                            + (f"  |  {warned} undersize piece{'s' if warned != 1 else ''}, "
+                               "see the Summary tab" if warned else ""))
         else:
             self.set_status("Fix the highlighted fields" if issues else (general[0] if general else ""))
         return not issues and not general

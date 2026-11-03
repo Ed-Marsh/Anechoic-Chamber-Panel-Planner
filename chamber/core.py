@@ -51,6 +51,7 @@ DEFAULTS = {
     "corner_joints": False,
     "stagger": 0.5,
     "kerf": 3,
+    "min_panel": 0,
     "explode_mm": 300,
 }
 
@@ -120,6 +121,7 @@ def validate_config(raw):
     number("steel_thickness", cfg["steel_thickness"], 0)
     number("stagger", cfg["stagger"], 0)
     number("kerf", cfg["kerf"], 0)
+    number("min_panel", cfg["min_panel"], 0, label="Minimum panel size")
     number("explode_mm", cfg["explode_mm"], 0)
 
     ov = section("thickness_override")
@@ -155,6 +157,9 @@ def validate_config(raw):
     if total_area / sheet_area > MAX_SHEETS_ESTIMATE:
         issues.append(("sheet.length", "The sheet size is too small for this chamber "
                                        "(it would need an unreasonable number of sheets)"))
+    if cfg["min_panel"] > min(S["length"], S["width"]) / 2:
+        issues.append(("min_panel", "Minimum panel size must be at most "
+                                    f"{min(S['length'], S['width']) / 2:g} mm (half the shorter sheet side)"))
     if dcfg:
         wall = dcfg["wall"]
         wl = (L + t["west"] + t["east"]) if wall in ("north", "south") else W
@@ -212,19 +217,68 @@ def row_lines(w, step, offset):
     return pts
 
 
-def tile_surface(w, h, sheet, door=None, stagger=0.5):
+def balance_ends(pts, step, min_panel):
+    """Stop a row (or the column of rows) ending in a sliver. If the first or last
+    piece is shorter than min_panel, join it to its neighbour when the two fit on one
+    sheet (<= step), otherwise move the shared joint just far enough that the end piece
+    is exactly min_panel (2440 + 387 with a 500 minimum becomes 2327 + 500). Returns a new
+    list; no-op when min_panel <= 0."""
+    if min_panel <= 0 or len(pts) < 3:
+        return pts
+    lens = [b - a for a, b in zip(pts, pts[1:])]
+    for end in (-1, 0):                      # tail first, then head
+        if len(lens) < 2:
+            break
+        i, j = (len(lens) - 2, len(lens) - 1) if end == -1 else (0, 1)
+        if lens[j if end == -1 else i] < min_panel - 0.01:
+            combined = lens[i] + lens[j]
+            if combined <= step + 0.01:
+                lens[i:j + 1] = [combined]
+            else:   # shift the joint just far enough that the end piece is min_panel
+                lens[i:j + 1] = [combined - min_panel, min_panel] if end == -1 else [min_panel, combined - min_panel]
+    out = [pts[0]]
+    for ln in lens:
+        out.append(out[-1] + ln)
+    out[-1] = pts[-1]                        # no float drift at the far edge
+    return out
+
+
+def avoid_aligned_joints(rows, min_panel, stagger):
+    """Running bond needs neighbouring rows not to share a joint. Balancing can move a
+    joint onto one in the next row, so slide it a little, keeping both pieces it
+    separates at least min_panel long. rows is a list of joint lists, edited in place."""
+    if min_panel <= 0 or stagger <= 0:
+        return
+    for j in range(1, len(rows)):
+        for k in range(1, len(rows[j]) - 1):
+            x = rows[j][k]
+            if not any(abs(x - o) < 1.0 for o in rows[j - 1][1:-1]):
+                continue
+            lo, hi = rows[j][k - 1] + min_panel, rows[j][k + 1] - min_panel
+            for d in (40, -40, 80, -80, 120, -120, 160, -160):
+                nx = x + d
+                if lo <= nx <= hi and not any(abs(nx - o) < 1.0 for o in rows[j - 1][1:-1]):
+                    rows[j][k] = nx
+                    break
+
+
+def tile_surface(w, h, sheet, door=None, stagger=0.5, min_panel=0):
     """Tile a w x h surface with sheets in running bond: alternate rows are shifted
     by stagger * sheet-length (0 = straight grid). Tries both sheet orientations,
-    keeps whichever gives fewer pieces then less seam length."""
+    keeps whichever gives fewer pieces then less seam length. With min_panel > 0 the
+    ends of rows and of the column of rows are balanced so no piece there is narrower
+    than that, and orientations with fewer undersize pieces win first."""
     best = None
     a, b = max(sheet), min(sheet)
     for sx, sy in ((a, b), (b, a)):
-        ys = grid_lines(h, sy)
+        ys = balance_ends(grid_lines(h, sy), sy, min_panel)
+        rows_xs = [balance_ends(row_lines(w, sx, (stagger * sx) % sx if j % 2 else 0.0), sx, min_panel)
+                   for j in range(len(ys) - 1)]
+        avoid_aligned_joints(rows_xs, min_panel, stagger)
         pieces, seams, xs_first = [], [], None
         for j in range(len(ys) - 1):
             y0, y1 = ys[j], ys[j + 1]
-            off = (stagger * sx) % sx if j % 2 else 0.0
-            xs = row_lines(w, sx, off)
+            xs = rows_xs[j]
             if xs_first is None:
                 xs_first = xs
             for i in range(len(xs) - 1):
@@ -240,7 +294,9 @@ def tile_surface(w, h, sheet, door=None, stagger=0.5):
             for s, e in clip_line(0, w, door, vertical=False, pos=y):
                 seams.append(("H", y, s, e))
         seam_len = sum(e - s for _, _, s, e in seams)
-        key = (len(pieces), seam_len)
+        slivers = (sum(1 for p, _ in pieces if min(p[2] - p[0], p[3] - p[1]) < min_panel - 0.01)
+                   if min_panel > 0 else 0)
+        key = (slivers, len(pieces), seam_len)
         if best is None or key < best[0]:
             best = (key, pieces, seams, xs_first, ys)
     return best[1], best[2], best[3], best[4]
@@ -307,7 +363,7 @@ def build(cfg):
     for n in SURFACES:
         w, h = size[n]
         d = door["rect"] if door and door["wall"] == n else None
-        pieces, seams, xs, ys = tile_surface(w, h, sheet, d, cfg["stagger"])
+        pieces, seams, xs, ys = tile_surface(w, h, sheet, d, cfg["stagger"], cfg["min_panel"])
         surfaces[n] = dict(w=w, h=h, pieces=pieces, seams=seams, door=d, xs=xs, ys=ys)
 
     return dict(cfg=cfg, L=L, W=W, H=H, t=t, board_t=board_t, sheet=sheet,
@@ -454,11 +510,23 @@ def compute_plan(m):
     ext = (m["L"] + m["t"]["west"] + m["t"]["east"], m["W"] + m["t"]["south"] + m["t"]["north"],
            m["H"] + m["t"]["floor"] + m["t"]["ceiling"])
     d = cfg.get("door")
+    warnings = []   # pieces still under min_panel: only door cut-outs can cause these
+    min_panel = cfg["min_panel"]
+    if min_panel > 0:
+        for n in SURFACES:
+            door = m["surfaces"][n]["door"]
+            for k, ((x0, y0, x1, y1), _) in enumerate(m["surfaces"][n]["pieces"], 1):
+                if min(x1 - x0, y1 - y0) < min_panel - 0.01:
+                    near = door and not (x1 < door[0] - 0.5 or x0 > door[2] + 0.5
+                                         or y1 < door[1] - 0.5 or y0 > door[3] + 0.5)
+                    warnings.append(f"{panel_id(n, k)} is {x1 - x0:.0f} x {y1 - y0:.0f} mm, under the "
+                                    f"{min_panel:g} mm minimum" + (" (next to the door opening)" if near else ""))
     lines = [f"Internal : {m['L']} x {m['W']} x {m['H']} mm",
              f"External : {ext[0]:.1f} x {ext[1]:.1f} x {ext[2]:.1f} mm",
              f"Door     : {m['door']['wall']} wall, {d['width']} x {d['height']}, offset {d['offset']}" if m["door"] else "Door     : none",
              f"Panels   : {full_count} full + {len(cut_items)} cut pieces from {len(sheets)} sheets = {total_sheets} sheets",
              f"Hat/flat : {total_hf/1000:.2f} m each, {len(bars)} x {stock} mm bars each"]
+    lines += [f"Warning  : {w}" for w in warnings]
 
     return dict(
         panel_rows=panel_rows, hatflat_rows=hatflat_rows, bom=bom,
@@ -466,7 +534,7 @@ def compute_plan(m):
         bar_count=len(bars), bar_offcuts=bar_offcuts, stock=stock,
         full_count=full_count, cut_count=len(cut_items), sheets_for_cuts=len(sheets),
         total_sheets=total_sheets, total_hf=total_hf, fasteners=screws, external=ext,
-        summary_lines=lines, summary="\n".join(lines) + "\n")
+        warnings=warnings, summary_lines=lines, summary="\n".join(lines) + "\n")
 
 
 # ---------------------------------------------------------------- 3D

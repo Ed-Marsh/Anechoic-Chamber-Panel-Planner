@@ -146,3 +146,16 @@ def test_settings_are_saved_on_close(tmp_path):
     a.on_close()
     saved = json.loads(path.read_text())
     assert saved["last_dir"] == str(tmp_path) and "x" in saved["geometry"]
+
+
+def test_min_panel_field_recuts_and_lists_door_warnings(app):
+    app.fields["min_panel"].var.set("500")
+    assert app.recompute_now()
+    assert app.model["cfg"]["min_panel"] == 500
+    rows = [app.summary_tree.item(i, "values") for i in app.summary_tree.get_children()]
+    warnings = [v[1] for v in rows if v[0] == "Warning"]
+    assert warnings and all("next to the door opening" in w for w in warnings)
+    assert "undersize" in app.status.cget("text")
+    app.fields["min_panel"].var.set("900")
+    assert not app.recompute_now()
+    assert "at most 610" in app.field_issues["min_panel"]
