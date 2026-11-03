@@ -1,0 +1,2 @@
+# Keep golden fixtures byte-for-byte; they are compared as bytes.
+tests/golden/* -text
