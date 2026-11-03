@@ -13,7 +13,7 @@ def surface_of(layer, label):
     return layer.split("_")[1].lower() if layer.startswith("PANEL_") else label
 
 
-def draw_chamber(ax, m, explode=0.0, hidden=(), show_hatflat=True, merged=False, margin=None):
+def draw_chamber(ax, m, explode=0.0, hidden=(), show_hatflat=True, merged=False, margin=None, zoom=1):
     """Draw the chamber's boxes on a 3D axes.
 
     hidden        surface names to leave out (their hat & flat go too)
@@ -22,6 +22,7 @@ def draw_chamber(ax, m, explode=0.0, hidden=(), show_hatflat=True, merged=False,
                   rotate, used by the GUI. The PNG preview keeps per-box drawing.
     margin        None keeps the preview's limits (the internal volume); a number
                   in mm frames the whole external shell, explosion included.
+    zoom          magnification of the box (1 = fit)
     """
     shown = [(layer, b) for layer, label, b in solids(m, explode)
              if surface_of(layer, label) not in hidden
@@ -58,7 +59,7 @@ def draw_chamber(ax, m, explode=0.0, hidden=(), show_hatflat=True, merged=False,
     ax.set_xlim(lo[0], hi[0])
     ax.set_ylim(lo[1], hi[1])
     ax.set_zlim(lo[2], hi[2])
-    ax.set_box_aspect(aspect)
+    ax.set_box_aspect(aspect, zoom=zoom)
     ax.set_xlabel("x (mm)")
     ax.set_ylabel("y (mm)")
     ax.set_zlabel("z (mm)")
