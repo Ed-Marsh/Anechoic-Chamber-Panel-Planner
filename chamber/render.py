@@ -38,8 +38,11 @@ def draw_chamber(ax, m, explode=0.0, hidden=(), show_hatflat=True, merged=False,
             groups.setdefault(layer, []).extend(box_faces(b))
         for layer, faces in groups.items():
             c, alpha = style(layer)
-            ax.add_collection3d(Poly3DCollection(faces, facecolor=c, edgecolor="k",
-                                                 linewidth=0.3, alpha=alpha))
+            coll = Poly3DCollection(faces, facecolor=c, edgecolor="k", linewidth=0.3, alpha=alpha)
+            # 3D axes keep a square drawing area; zoomed in, the chamber is bigger than it
+            # and would be cut off to that square while the axes and panes carry on.
+            coll.set_clip_on(False)
+            ax.add_collection3d(coll)
     else:
         for layer, b in shown:   # solids() order, as the original preview drew it
             c, alpha = style(layer)
