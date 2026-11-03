@@ -123,6 +123,7 @@ A config that cannot be built (a door that does not fit, a negative size, ...) g
 | `corner_joints` | `true` adds hat & flat along the floor/ceiling edges and the four vertical corners. |
 | `stagger` | Row offset as a fraction of sheet length. `0.5` = half-sheet running bond, `0` = straight grid. |
 | `kerf` | Saw kerf allowance used when nesting cut pieces and cutting bars. |
+| `min_panel` | Minimum piece size in mm, default `0` (off). When set, the leftover strip at the end of a row, and at the top of a surface, is not allowed to be narrower than this: the joint is moved so the end piece is exactly this size and the neighbouring panel is cut down to suit (e.g. 2440 + 387 becomes 2327 + 500 with `min_panel: 500`). Must be no more than half the shorter sheet side. Pieces still under the minimum because of the door cut-out are reported as warnings. |
 | `door.wall` | `north`, `south`, `east` or `west`. Omit `door` for no opening. |
 | `door.offset` | Distance along the wall from the internal west face (north/south walls) or internal south face (east/west walls) to the nearest edge of the door. |
 | `door.width` / `door.height` | Door opening size. |
@@ -158,7 +159,8 @@ Plan view: **x** runs west to east along the chamber length, **y** south to nort
 - The door is a plain opening: no frame, lintel or threshold, and no hat & flat around its perimeter.
 - Corner joints use hat & flat only if `corner_joints` is enabled; real corners may use angle or other trim.
 - The offcut nesting is a simple shelf-packing heuristic. It gives a workable sheet count, not a guaranteed optimum.
-- With `stagger`, a row can end in a narrow sliver depending on the dimensions. Check the cut list for very small pieces.
+- With `stagger`, a row can end in a narrow sliver depending on the dimensions. Set `min_panel` to have the ends re-cut, or check the cut list for very small pieces.
+- `min_panel` only re-cuts row and column ends. A piece made narrow by the door cut-out (the strip above a door, a thin piece beside it, or a row joint landing close to the door head) cannot be fixed that way and is listed as a warning in `summary.txt`, the GUI summary tab and the status bar. Balancing turns one full sheet into a cut piece, so the sheet count can occasionally rise.
 - The 3D DXF uses polyface meshes (surfaces), not editable solids.
 - The 3D view in the GUI draws one shape per layer for speed, so overlapping translucent faces can sort slightly differently from the PNG preview.
 - The tool plans the panel layout only. It does not check structural adequacy, support spacing or acoustic performance, so verify seam positions against your framing and loads.
