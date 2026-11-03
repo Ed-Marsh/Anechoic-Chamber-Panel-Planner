@@ -52,3 +52,11 @@ def test_cli_prints_the_summary_then_the_paths(tmp_path, capsys):
     lines = capsys.readouterr().out.splitlines()
     assert lines[0] == "Internal : 4000 x 3000 x 2400 mm"
     assert [ln.split(":")[0] for ln in lines[5:]] == ["DXF", "3D DXF", "3D DXF (exploded)", "Preview"]
+
+
+def test_merged_3d_drawing_is_not_clipped_so_zooming_in_keeps_the_whole_chamber():
+    from matplotlib.figure import Figure
+    from chamber import render
+    ax = Figure().add_subplot(projection="3d")
+    render.draw_chamber(ax, core.build(variants()["example"]), merged=True, margin=100, zoom=2.6)
+    assert ax.collections and not any(c.get_clip_on() for c in ax.collections)
