@@ -1,9 +1,9 @@
 """Regression check: the CLI output for example_config.json must not change.
 
 Golden files in tests/golden/ were produced by the original single-file
-chamber.py. CSVs and summary are compared byte for byte, DXFs by an
-order-sensitive digest of their entities (ezdxf stamps every file with a
-timestamp and GUIDs, so raw DXF bytes differ between identical runs).
+chamber.py. CSVs and summary are compared byte for byte (line endings aside),
+DXFs by an order-sensitive digest of their entities (ezdxf stamps every file
+with a timestamp and GUIDs, so raw DXF bytes differ between identical runs).
 """
 import json
 import os
@@ -16,6 +16,7 @@ import dxfutil
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOLDEN = os.path.join(ROOT, "tests", "golden")
+CRLF, LF = b"\r\n", b"\n"
 TEXT_FILES = ["bom.csv", "panel_cutlist.csv", "hatflat_cutlist.csv", "summary.txt"]
 
 
@@ -31,10 +32,11 @@ def cli_run(tmp_path_factory):
 @pytest.mark.parametrize("name", TEXT_FILES)
 def test_text_outputs_identical(cli_run, name):
     out, _ = cli_run
+    # summary.txt is written in text mode, so it follows the platform newline.
     with open(os.path.join(GOLDEN, name), "rb") as f:
-        want = f.read()
+        want = f.read().replace(CRLF, LF)
     with open(out / name, "rb") as f:
-        assert f.read() == want
+        assert f.read().replace(CRLF, LF) == want
 
 
 def test_stdout_summary_identical(cli_run):
