@@ -1,0 +1,97 @@
+name: Test and build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install Tk and a virtual display (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
+      - run: python -m pip install -r requirements-dev.txt
+      - name: Run tests (Linux, under a virtual display so the GUI tests run)
+        if: runner.os == 'Linux'
+        run: xvfb-run -a python -m pytest -v
+      - name: Run tests (Windows)
+        if: runner.os == 'Windows'
+        run: python -m pytest -v
+
+  build-windows:
+    name: Build Windows executables
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - run: python -m pip install -r requirements-dev.txt
+
+      - name: Build one-file executables
+        run: python packaging/build_exes.py
+      - name: Check the console exe gives the same output as the tests expect
+        shell: bash
+        run: |
+          dist/chamber-cli.exe example_config.json -o smoke_cli
+          diff <(tr -d '\r' < smoke_cli/summary.txt) <(tr -d '\r' < tests/golden/summary.txt)
+          diff <(tr -d '\r' < smoke_cli/panel_cutlist.csv) <(tr -d '\r' < tests/golden/panel_cutlist.csv)
+          test -s smoke_cli/chamber.dxf && test -s smoke_cli/chamber_3d.png
+      - name: Check the GUI exe starts and exports
+        shell: bash
+        run: |
+          dist/ChamberPlanner.exe --selftest smoke_gui
+          diff <(tr -d '\r' < smoke_gui/summary.txt) <(tr -d '\r' < tests/golden/summary.txt)
+          test -s smoke_gui/chamber_3d.dxf && test -s smoke_gui/chamber_3d.png
+
+      - name: Build one-folder fallback (zipped)
+        shell: pwsh
+        run: |
+          python packaging/build_exes.py --onedir
+          Compress-Archive -Path dist/ChamberPlanner -DestinationPath dist/ChamberPlanner-onedir.zip
+          Compress-Archive -Path dist/chamber-cli -DestinationPath dist/chamber-cli-onedir.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows-executables
+          path: |
+            dist/ChamberPlanner.exe
+            dist/chamber-cli.exe
+            dist/ChamberPlanner-onedir.zip
+            dist/chamber-cli-onedir.zip
+          if-no-files-found: error
+
+  release:
+    name: Attach to release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-windows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: windows-executables
+          path: release
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: release/*
+          generate_release_notes: true
