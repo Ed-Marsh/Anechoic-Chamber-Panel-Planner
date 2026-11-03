@@ -489,7 +489,7 @@ $SKPOLY
   9
 $TDCREATE
  40
-2461333.761203704
+2461348.627280093
   9
 $TDUCREATE
  40
@@ -497,7 +497,7 @@ $TDUCREATE
   9
 $TDUPDATE
  40
-2461333.761203704
+2461348.627280093
   9
 $TDUUPDATE
  40
@@ -929,11 +929,11 @@ $PSTYLEMODE
   9
 $FINGERPRINTGUID
   2
-{540335C8-B292-4402-ACD5-096920E6D87C}
+{2870DB5C-6BCC-4959-815E-0EC4850EB452}
   9
 $VERSIONGUID
   2
-{DA1B294F-9FBF-4859-8CFF-2016C6E4ECB1}
+{4AE9076A-7E41-4828-904F-8F89E628BD6A}
   9
 $EXTNAMES
 290
@@ -12753,7 +12753,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -12775,7 +12775,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -12797,7 +12797,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -12819,7 +12819,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13133,7 +13133,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13155,7 +13155,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13177,7 +13177,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13199,7 +13199,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13513,7 +13513,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13535,7 +13535,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13557,7 +13557,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13579,7 +13579,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13893,7 +13893,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13915,7 +13915,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13937,7 +13937,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -13959,7 +13959,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14273,7 +14273,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14295,7 +14295,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14317,7 +14317,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14339,7 +14339,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14653,7 +14653,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14675,7 +14675,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14697,7 +14697,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -14719,7 +14719,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15033,7 +15033,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15055,7 +15055,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15077,7 +15077,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15099,7 +15099,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15325,7 +15325,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15347,7 +15347,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15369,7 +15369,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15391,7 +15391,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -15413,7 +15413,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2438.4
+2448.4
  70
 192
   0
@@ -15435,7 +15435,7 @@ AcDbPolyFaceMeshVertex
  20
 -23.4
  30
-2438.4
+2448.4
  70
 192
   0
@@ -15457,7 +15457,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -15479,7 +15479,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16085,7 +16085,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16107,7 +16107,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16129,7 +16129,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16151,7 +16151,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16173,7 +16173,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16195,7 +16195,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16217,7 +16217,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16239,7 +16239,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16845,7 +16845,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16867,7 +16867,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16889,7 +16889,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16911,7 +16911,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -16933,7 +16933,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16955,7 +16955,7 @@ AcDbPolyFaceMeshVertex
  20
 1196.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16977,7 +16977,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -16999,7 +16999,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -17605,7 +17605,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -17627,7 +17627,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -17649,7 +17649,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2413.4
+2423.4
  70
 192
   0
@@ -17671,7 +17671,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -17693,7 +17693,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -17715,7 +17715,7 @@ AcDbPolyFaceMeshVertex
  20
 2416.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -17737,7 +17737,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2438.4
+2448.4
  70
 192
   0
@@ -17759,7 +17759,7 @@ AcDbPolyFaceMeshVertex
  20
 3023.4
  30
-2438.4
+2448.4
  70
 192
   0
@@ -18365,7 +18365,7 @@ AcDbPolyFaceMeshVertex
  20
 1171.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -18387,7 +18387,7 @@ AcDbPolyFaceMeshVertex
  20
 1221.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -18409,7 +18409,7 @@ AcDbPolyFaceMeshVertex
  20
 1221.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -18431,7 +18431,7 @@ AcDbPolyFaceMeshVertex
  20
 1171.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -18453,7 +18453,7 @@ AcDbPolyFaceMeshVertex
  20
 1171.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -18475,7 +18475,7 @@ AcDbPolyFaceMeshVertex
  20
 1171.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -18497,7 +18497,7 @@ AcDbPolyFaceMeshVertex
  20
 1221.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -18519,7 +18519,7 @@ AcDbPolyFaceMeshVertex
  20
 1221.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -19125,7 +19125,7 @@ AcDbPolyFaceMeshVertex
  20
 2391.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -19147,7 +19147,7 @@ AcDbPolyFaceMeshVertex
  20
 2441.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -19169,7 +19169,7 @@ AcDbPolyFaceMeshVertex
  20
 2441.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -19191,7 +19191,7 @@ AcDbPolyFaceMeshVertex
  20
 2391.6
  30
-2413.4
+2423.4
  70
 192
   0
@@ -19213,7 +19213,7 @@ AcDbPolyFaceMeshVertex
  20
 2391.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -19235,7 +19235,7 @@ AcDbPolyFaceMeshVertex
  20
 2391.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -19257,7 +19257,7 @@ AcDbPolyFaceMeshVertex
  20
 2441.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -19279,7 +19279,7 @@ AcDbPolyFaceMeshVertex
  20
 2441.6
  30
-2438.4
+2448.4
  70
 192
   0
@@ -34623,7 +34623,7 @@ DictionaryVariables
 280
 0
   1
-1.4.5 @ 2026-10-19T17:16:08.285429+00:00
+1.4.5 @ 2026-11-03T15:03:17.395384+00:00
   0
 VISUALSTYLE
   5
@@ -35335,7 +35335,7 @@ DictionaryVariables
 280
 0
   1
-1.4.5 @ 2026-10-19T17:16:08.353333+00:00
+1.4.5 @ 2026-11-03T15:03:17.444563+00:00
   0
 ENDSEC
   0

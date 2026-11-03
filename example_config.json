@@ -10,9 +10,7 @@
   },
   "board_thickness": 22,
   "steel_thickness": 0.7,
-  "thickness_override": {
-    "ceiling": 12
-  },
+  "thickness_override": {},
   "hat_flat": {
     "hat_width": 50,
     "hat_depth": 25,

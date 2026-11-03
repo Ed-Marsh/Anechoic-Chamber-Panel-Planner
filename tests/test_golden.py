@@ -59,6 +59,6 @@ def test_dxf_content_identical(cli_run):
 def test_golden_numbers(cli_run):
     _, stdout = cli_run
     assert "Internal : 4000 x 3000 x 2400 mm" in stdout
-    assert "External : 4046.8 x 3046.8 x 2436.8 mm" in stdout
+    assert "External : 4046.8 x 3046.8 x 2446.8 mm" in stdout
     assert "4 full + 26 cut pieces from 18 sheets = 22 sheets" in stdout
     assert "46.72 m each, 20 x 3000 mm bars each" in stdout
