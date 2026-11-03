@@ -2,3 +2,7 @@ __pycache__/
 *.pyc
 out/
 .venv/
+chamber_3d.png
+build/
+dist/
+.pytest_cache/
