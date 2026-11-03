@@ -756,18 +756,41 @@ class ChamberApp(tk.Tk):
         self.destroy()
 
 
-def main():
+def selftest(outdir):
+    """Start the real app, load the example, recompute and export everything to outdir.
+    Used to check a frozen (PyInstaller) build, which has no console to print to."""
+    app = ChamberApp(settings_file=os.path.join(outdir, "settings.json"))
+    try:
+        app.update()
+        ok = app.recompute_now()
+        app.redraw3d()
+        app.redraw2d()
+        app.update()
+        if ok:
+            exporters.export_all(app.model, outdir, app.plan)
+        return 0 if ok else 1
+    finally:
+        app.modified = False
+        app.destroy()
+
+
+def main(argv=None):
+    argv = sys.argv[1:] if argv is None else argv
     if sys.platform == "win32":
         try:    # crisp text on high-DPI screens
             import ctypes
             ctypes.windll.shcore.SetProcessDpiAwareness(1)
         except Exception:
             pass
+    if len(argv) == 2 and argv[0] == "--selftest":
+        os.makedirs(argv[1], exist_ok=True)
+        return selftest(argv[1])
     app = ChamberApp()
-    if len(sys.argv) > 1:
-        app.load_config_file(sys.argv[1])
+    if argv:
+        app.load_config_file(argv[0])
     app.mainloop()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

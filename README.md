@@ -9,6 +9,10 @@ A small Python tool that takes the dimensions of an anechoic chamber built from 
 
 The chamber is a floor, four walls and a ceiling, with an optional door opening. All dimensions are in **millimetres**.
 
+It comes in two forms that share the same code and produce identical files: a **Windows GUI** (`ChamberPlanner.exe`) with a live 3D view, and the original **command-line tool** driven by a JSON config.
+
+![Chamber Planner GUI](docs/gui.png)
+
 ![Chamber preview](docs/chamber_3d.png)
 
 Example output for the sample config is in [`examples/`](examples/).
@@ -23,17 +27,51 @@ Example output for the sample config is in [`examples/`](examples/).
 - **Hat & flat** seams generated from the panel layout, with cut lengths, stock-bar packing and a fastener estimate.
 - Cut pieces are shelf-packed onto sheets so the BOM reflects the sheets you actually need to buy.
 
-## Requirements
+## Getting started
 
-- Python 3.8+
-- [`ezdxf`](https://ezdxf.mozman.at/) (DXF output)
-- `matplotlib` (optional, only for the PNG preview)
+### Windows executables (no Python needed)
+
+Download from the [latest release](../../releases/latest):
+
+| File | What it is |
+| --- | --- |
+| `ChamberPlanner.exe` | The GUI. Double-click to run. |
+| `chamber-cli.exe` | The command-line tool, for use in a terminal: `chamber-cli.exe config.json -o out`. |
+| `ChamberPlanner-onedir.zip`, `chamber-cli-onedir.zip` | The same programs as an unzipped folder (see the note below). |
+
+> **Windows Defender / SmartScreen warning.** These executables are **not code-signed**, and unsigned
+> PyInstaller one-file programs are often flagged by Windows Defender, SmartScreen or other antivirus
+> tools (a "Windows protected your PC" screen, or a false-positive detection). The source is all in this
+> repository and the executables are built from it by the public GitHub Actions workflow. If your
+> machine objects, use the `-onedir.zip` downloads, which are flagged far less often, or run from source.
+> Click *More info* then *Run anyway* only if you trust the download.
+
+### From source
+
+Python 3.10 or newer, with [`ezdxf`](https://ezdxf.mozman.at/) (DXF output) and `matplotlib` (3D view and PNG preview). Tkinter ships with the standard Windows and macOS Python installers; on Debian/Ubuntu install `python3-tk`.
 
 ```bash
-pip install ezdxf matplotlib
+pip install -r requirements.txt
+
+python -m chamber.gui                 # the GUI
+python chamber.py config.json -o out  # the command line
 ```
 
-## Usage
+## The GUI
+
+Run `ChamberPlanner.exe` (or `python -m chamber.gui`; an optional argument opens a config file).
+
+- **Left: the form**, grouped like the JSON: internal size, sheet, board and steel thickness, per-surface board overrides, hat & flat, corner joints, stagger, kerf, explode distance and the door. Every key in the [configuration table](#configuration) has a field.
+- **Right: tabs**
+  - **3D view**: the assembled chamber, rotatable (drag) and zoomable (right-drag or scroll). The *Explode* slider runs from 0 to `explode_mm`. Untick *Hat & flat* or any surface to look inside; hiding a surface also hides its hat & flat.
+  - **Summary / BOM**: external size, panel and hat & flat totals, bill of materials, panel thickness by surface.
+  - **Panel cut list** and **Hat & flat cut list**: the same tables as the CSV files.
+  - **Surface layout**: a 2D drawing of any one surface, with panel IDs, cut sizes and the door.
+- The model recalculates about 300 ms after you stop typing. A problem is shown in red next to the field that caused it (for example *Door does not fit within the wall*) and the last good view stays on screen until it is fixed.
+- **File menu**: open, save and save-as for JSON configs; **Export all** writes the same files as the command line into a folder you choose; **Export single item** writes any one of them. Opening a file with missing keys applies the defaults; keys the GUI does not know about are kept when you save.
+- Window size and the last folder you used are remembered in `%APPDATA%\ChamberPlanner\settings.json` (never in the repository).
+
+## Command line
 
 ```bash
 # Print an example config
@@ -45,6 +83,8 @@ python chamber.py config.json -o out
 # Or try the bundled example straight away
 python chamber.py example_config.json -o out
 ```
+
+A config that cannot be built (a door that does not fit, a negative size, ...) gives a plain message and exit code 1 rather than a traceback.
 
 ## Configuration
 
@@ -86,7 +126,9 @@ python chamber.py example_config.json -o out
 | `door.wall` | `north`, `south`, `east` or `west`. Omit `door` for no opening. |
 | `door.offset` | Distance along the wall from the internal west face (north/south walls) or internal south face (east/west walls) to the nearest edge of the door. |
 | `door.width` / `door.height` | Door opening size. |
-| `explode_mm` | Distance each surface is pushed out in the exploded 3D file (default 300). |
+| `explode_mm` | Distance each surface is pushed out in the exploded 3D file (default 300). Also the top of the GUI's explode slider. |
+
+Optional keys may be left out and take their defaults: `steel_thickness` 0, `thickness_override` none, `hat_flat.flat_thickness` 3, `hat_flat.end_clearance` 0, `hat_flat.screw_pitch` 0 (no fastener estimate), `hat_flat.draw_in_3d` true, `corner_joints` false, `stagger` 0.5, `kerf` 3, `explode_mm` 300, `door` none.
 
 ## Outputs
 
@@ -118,7 +160,33 @@ Plan view: **x** runs west to east along the chamber length, **y** south to nort
 - The offcut nesting is a simple shelf-packing heuristic. It gives a workable sheet count, not a guaranteed optimum.
 - With `stagger`, a row can end in a narrow sliver depending on the dimensions. Check the cut list for very small pieces.
 - The 3D DXF uses polyface meshes (surfaces), not editable solids.
+- The 3D view in the GUI draws one shape per layer for speed, so overlapping translucent faces can sort slightly differently from the PNG preview.
 - The tool plans the panel layout only. It does not check structural adequacy, support spacing or acoustic performance, so verify seam positions against your framing and loads.
+
+## Project layout
+
+```
+chamber/
+  core.py        config defaults and validation, tiling, cut-list packing, 3D solids (no printing, no file I/O)
+  exporters.py   CSV and summary files, 2D and 3D DXF, PNG preview, export_all()
+  render.py      matplotlib drawing shared by the PNG and the GUI
+  cli.py         command line
+  gui.py         Tkinter app
+chamber.py       thin shim so `python chamber.py config.json -o out` keeps working
+packaging/       PyInstaller build script and entry points
+tests/           pytest suite
+```
+
+## Development
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest
+```
+
+The tests include a golden check that the CLI output for `example_config.json` is unchanged, geometry invariants (panel areas plus door equal the surface area, no overlaps), config validation, CLI/GUI/export parity, and a GUI smoke test that is skipped when there is no display.
+
+To build the executables on Windows: `python packaging/build_exes.py` (add `--onedir` for folders). They land in `dist/`. The GitHub Actions workflow in `.github/workflows/build.yml` runs the tests on Linux and Windows, builds both executables, checks them (the console exe's output is compared with the golden files; the GUI exe's `--selftest` loads the example and exports everything), uploads them as artefacts, and attaches them to a GitHub Release when a `v*` tag is pushed.
 
 ## Licence
 
