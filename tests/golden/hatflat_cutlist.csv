@@ -1,0 +1,30 @@
+joint,surface,cut_length_mm,qty_hat,qty_flat,from_stock_bar
+FLO-J01,floor,1220.0,1,1,18
+FLO-J02,floor,1220.0,1,1,18
+FLO-J03,floor,1220.0,1,1,19
+FLO-J04,floor,606.8,1,1,10
+FLO-J05/1,floor,2023.4,1,1,10
+FLO-J05/2,floor,2023.4,1,1,11
+FLO-J06/1,floor,2023.4,1,1,12
+FLO-J06/2,floor,2023.4,1,1,13
+CEI-J01,ceiling,1220.0,1,1,19
+CEI-J02,ceiling,1220.0,1,1,20
+CEI-J03,ceiling,1220.0,1,1,20
+CEI-J04,ceiling,606.8,1,1,11
+CEI-J05/1,ceiling,2023.4,1,1,14
+CEI-J05/2,ceiling,2023.4,1,1,15
+CEI-J06/1,ceiling,2023.4,1,1,16
+CEI-J06/2,ceiling,2023.4,1,1,17
+NOR-J01,north,2400.0,1,1,1
+NOR-J02,north,2400.0,1,1,2
+NOR-J03,north,2400.0,1,1,3
+SOU-J01,south,400.0,1,1,1
+SOU-J02,south,2400.0,1,1,4
+SOU-J03,south,2400.0,1,1,5
+EAS-J01,east,2400.0,1,1,6
+EAS-J02,east,2400.0,1,1,7
+WES-J01,west,2400.0,1,1,8
+WES-J02,west,2400.0,1,1,9
+
+Stock bars needed (each of hat AND flat),20,x 3000 mm
+Offcut per bar (mm),194.0,597.0,597.0,597.0,597.0,597.0,597.0,597.0,597.0,364.0,364.0,974.0,974.0,974.0,974.0,974.0,974.0,554.0,554.0,554.0
